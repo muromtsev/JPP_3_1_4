@@ -77,6 +77,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void save(User user) {;
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
     @Transactional(readOnly = true)
@@ -88,6 +89,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void update(int id, User udatedUser) {
         udatedUser.setId(id);
+        udatedUser.setPassword(passwordEncoder.encode(udatedUser.getPassword()));
         userRepository.save(udatedUser);
     }
 
