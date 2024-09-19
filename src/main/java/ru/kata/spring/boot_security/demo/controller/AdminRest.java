@@ -1,5 +1,7 @@
 package ru.kata.spring.boot_security.demo.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
@@ -38,9 +40,9 @@ public class AdminRest {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteUser(@PathVariable int id) {
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable int id) {
         userService.delete(id);
-        return "ok";
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
 }

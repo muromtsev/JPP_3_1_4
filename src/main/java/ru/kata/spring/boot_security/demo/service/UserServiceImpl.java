@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void update(int id, User udatedUser) {
         udatedUser.setId(id);
-        udatedUser.setPassword(passwordEncoder.encode(udatedUser.getPassword()));
+        udatedUser.setPassword(udatedUser.getPassword());
         userRepository.save(udatedUser);
     }
 

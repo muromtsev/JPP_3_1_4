@@ -1,3 +1,4 @@
+
 const requestURL = 'http://localhost:8080/api/admin';
 
 const usersTableNavLink = document.getElementById("horizontal_navigation-users_table");
@@ -94,7 +95,8 @@ addUserForm.addEventListener("submit", (e) => {
     })
         .then(() => {
             usersTableNavLink.click();
-            location.reload();
+            addUserForm.reset();
+            getAllUsers();
         });
 })
 
@@ -185,10 +187,11 @@ allUsersTable.addEventListener("click", e => {
             fetch(`${requestURL}/${currentUserId}`, {
                 method: 'DELETE',
             })
-                .then(res => res.json());
-            modalDeleteExitBtn.click();
-            getAllUsers();
-            location.reload();
+                .then(res => res.json())
+                .then(() => {
+                    modalDeleteExitBtn.click();
+                    getAllUsers();
+                })
         })
     }
 
@@ -208,26 +211,26 @@ allUsersTable.addEventListener("click", e => {
                 'Content-Type': 'application/json;charset=UTF-8'
             }
         })
-            .then(res => res.json())
-            .then(user => {
+        .then(res => res.json())
+        .then(user => {
 
-                editUsersId.value = user.id;
-                editUsersName.value = user.name;
-                editUsersAge.value = user.age;
-                editUsersEmail.value = user.email;
-                editUsersPass.value = user.password;
+            editUsersId.value = user.id;
+            editUsersName.value = user.name;
+            editUsersAge.value = user.age;
+            editUsersEmail.value = user.email;
+            editUsersPass.value = user.password;
 
-                let editRoles = user.roles.map(i => i.name)
-                editRoles.forEach(
-                    role => {
-                        if (role === "ROLE_ADMIN") {
-                            editRoleAdminOption.setAttribute('selected', "selected");
+            let editRoles = user.roles.map(i => i.name)
+            editRoles.forEach(
+                role => {
+                    if (role === "ROLE_ADMIN") {
+                        editRoleAdminOption.setAttribute('selected', "selected");
 
-                        } else if (role === "ROLE_USER") {
-                            editRoleUserOption.setAttribute('selected', "selected");
-                        }
-                    })
-            })
+                    } else if (role === "ROLE_USER") {
+                        editRoleUserOption.setAttribute('selected', "selected");
+                    }
+                })
+        })
         $('#modal-edit').modal('show');
 
         modalEditSubmitBtn.addEventListener("click", e => {
@@ -248,10 +251,11 @@ allUsersTable.addEventListener("click", e => {
                 },
                 body: JSON.stringify(user)
             })
-                .then(res => console.log(res));
-            modalEditExitBtn.click();
-            getAllUsers();
-            location.reload();
+            .then(res => console.log(res))
+            .then(() => {
+                modalEditExitBtn.click();
+                getAllUsers();
+            })
         })
     }
 })
@@ -300,7 +304,7 @@ modalDeleteCloseBtn.addEventListener("click", e => {
 const userPanelData      = document.getElementById("user_panel-data");
 const authorisedUserData = document.getElementById("authorised_user-data");
 
-let currentUser = () => {
+let currentUser = async () => {
     fetch ("http://localhost:8080/api/user", {
         method: 'GET',
         headers: {
